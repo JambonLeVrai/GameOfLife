@@ -1,53 +1,10 @@
 from PyQt6.QtWidgets import QApplication, QWidget, QMainWindow, QVBoxLayout, QPushButton, QHBoxLayout, QSpinBox, QLabel, QComboBox
-from PyQt6.QtGui import QImage, QPainter, QPixmap
 import numpy as np
 import sys
 
-
-class MainWidget(QWidget):
-    def __init(self, parent=None):
-        super().__init__(parent)
-        self.my_layout = QVBoxLayout()
-
-        self.my_button = QPushButton('Test')
-        self.my_layout.addWidget(self.my_button)
-
-        self.setLayout(self.my_layout)
-
-
-class GridImage(QWidget):
-    def __init__(self):
-        super().__init__()
-        self.image_data = None
-        self.zoom = 1
-
-    def set_image_data(self, data: np.ndarray):
-        self.image_data = data
-        self.update()
-
-    def paintEvent(self, event) -> None:
-        if self.image_data is None:
-            return
-
-        height, width = self.image_data.shape
-        bytes_per_line = width
-        qimage = QImage(
-            self.image_data.data,
-            width,
-            height,
-            bytes_per_line,
-            QImage.Format.Format_Grayscale8
-        )
-
-        self.set_zoom(self.zoom)
-
-        painter = QPainter(self)
-        painter.drawImage(self.rect(), qimage)
-
-    def set_zoom(self, zoom_level):
-        self.setFixedWidth(self.image_data.shape[1] * zoom_level)
-        self.setFixedHeight(self.image_data.shape[0] * zoom_level)
-        self.zoom = zoom_level
+from grid_image import GridImage
+from simulator import Simulator
+from threads import SharedBuffer, DisplayThread, SimulationThread
 
 
 class MainWindow(QMainWindow):
@@ -140,6 +97,11 @@ class MainWindow(QMainWindow):
 
         self.disabled_list_on_play = [self.apply_grid_dimensions_w, self.clear_grid_w, self.random_grid_w]
 
+        self.sim_obj = Simulator(255, 255)
+        self.shared_buffer = SharedBuffer()
+        self.simulation_thread = SimulationThread(self.shared_buffer, self.sim_obj, 1e-3)
+        self.display_thread = DisplayThread(self.shared_buffer, self.simulation_thread, self.grid_image)
+
 
     def update_zoom_level(self):
         zoom_level_int = int(self.zoom_level.currentText())
@@ -159,9 +121,15 @@ class MainWindow(QMainWindow):
         for w in self.disabled_list_on_play:
             w.setEnabled(False)
 
+        self.simulation_thread.start()
+        self.display_thread.start()
+
     def stop_simulation(self):
         for w in self.disabled_list_on_play:
             w.setEnabled(True)
+
+        self.simulation_thread.stop()
+        self.display_thread.stop()
 
     def apply_grid_dimensions(self):
         # PLACEHOLDER
