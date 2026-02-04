@@ -4,7 +4,7 @@ import numpy as np
 from PyQt6.QtCore import QMutex, QWaitCondition, QThread, pyqtSignal, QTimer
 
 
-class SharedBuffer:
+class FFSharedBuffer:
     def __init__(self):
         self.buffer = None
         self.mutex = QMutex()
@@ -14,9 +14,9 @@ class SharedBuffer:
         self.frame_ready = False
 
 
-class SimulationThread(QThread):
+class FFSimulationThread(QThread):
 
-    def __init__(self, shared_buffer: SharedBuffer, sim_obj, step_time):
+    def __init__(self, shared_buffer: FFSharedBuffer, sim_obj, step_time):
         super().__init__()
         self.shared_buffer = shared_buffer
         self.running = True
@@ -44,7 +44,7 @@ class SimulationThread(QThread):
         self.running = False
 
 
-class DisplayThread(QThread):
+class FFDisplayThread(QThread):
     def __init__(self, shared_buffer, simulation_thread, grid_image, frame_duration_ms = 30.):
         super().__init__()
         self.shared_buffer = shared_buffer

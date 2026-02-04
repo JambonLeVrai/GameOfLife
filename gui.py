@@ -3,8 +3,9 @@ import numpy as np
 import sys
 
 from grid_image import GridImage
+from simple_thread import SimpleSimulationThread
 from simulator import Simulator
-from threads import SharedBuffer, DisplayThread, SimulationThread
+from ff_threads import FFSharedBuffer, FFDisplayThread, FFSimulationThread
 
 
 class MainWindow(QMainWindow):
@@ -98,9 +99,11 @@ class MainWindow(QMainWindow):
         self.disabled_list_on_play = [self.apply_grid_dimensions_w, self.clear_grid_w, self.random_grid_w]
 
         self.sim_obj = Simulator(255, 255)
-        self.shared_buffer = SharedBuffer()
-        self.simulation_thread = SimulationThread(self.shared_buffer, self.sim_obj, 1e-3)
-        self.display_thread = DisplayThread(self.shared_buffer, self.simulation_thread, self.grid_image)
+        #self.ff_shared_buffer = FFSharedBuffer()
+        #self.ff_simulation_thread = FFSimulationThread(self.ff_shared_buffer, self.sim_obj, 1e-3)
+        #self.ff_display_thread = FFDisplayThread(self.ff_shared_buffer, self.ff_simulation_thread, self.grid_image)
+
+        self.simple_simulation_thread = SimpleSimulationThread(self.sim_obj, self.grid_image, 16.67)
 
 
     def update_zoom_level(self):
@@ -121,15 +124,18 @@ class MainWindow(QMainWindow):
         for w in self.disabled_list_on_play:
             w.setEnabled(False)
 
-        self.simulation_thread.start()
-        self.display_thread.start()
+        #self.ff_simulation_thread.start()
+        #self.ff_display_thread.start()
+        self.simple_simulation_thread = SimpleSimulationThread(self.sim_obj, self.grid_image, 16.67)
+        self.simple_simulation_thread.start()
 
     def stop_simulation(self):
         for w in self.disabled_list_on_play:
             w.setEnabled(True)
 
-        self.simulation_thread.stop()
-        self.display_thread.stop()
+        #self.ff_simulation_thread.stop()
+        #self.ff_display_thread.stop()
+        self.simple_simulation_thread.stop()
 
     def apply_grid_dimensions(self):
         # PLACEHOLDER
