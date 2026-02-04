@@ -140,9 +140,10 @@ class MainWindow(QMainWindow):
         self.simple_simulation_thread.stop()
 
     def apply_grid_dimensions(self):
-        # PLACEHOLDER
-        my_data = np.astype(np.trunc(np.random.rand(self.height_spin.value(), self.width_spin.value()) * 255), np.uint8)
-        self.grid_image.set_image_data(my_data)
+        # my_data = np.astype(np.trunc(np.random.rand(self.height_spin.value(), self.width_spin.value()) * 255), np.uint8)
+        # self.grid_image.set_image_data(my_data)
+        self.sim_obj.resize(self.height_spin.value(), self.width_spin.value())
+        self.grid_image.set_image_data(self.sim_obj.grid.get_numpy_array())
 
     def clear_grid(self):
         # PLACEHOLDER
@@ -150,9 +151,8 @@ class MainWindow(QMainWindow):
         self.grid_image.set_image_data(my_data)
 
     def random_grid(self):
-        # PLACEHOLDER
-        my_data = np.astype(np.trunc(np.random.rand(self.height_spin.value(), self.width_spin.value()) * 255), np.uint8)
-        self.grid_image.set_image_data(my_data)
+        self.sim_obj.grid.randomise()
+        self.grid_image.set_image_data(self.sim_obj.grid.get_numpy_array())
 
     def rulesets_changed(self):
         pass  # PLACEHOLDER
