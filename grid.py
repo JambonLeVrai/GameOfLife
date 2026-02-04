@@ -39,19 +39,20 @@ class Grid:
         for x in range(self.width):
             for y in range(self.height):
                 self.grid[y][x].update()
-                if self.grid[y][x].status_actual == max_status:
-                    self.grid[y][x].color = 0
+
+    def get_numpy_array(self):
+        return np.array([[(1-self.grid[y][x].status_actual)*255 for x in range(self.width)] for y in range(self.height)], dtype=np.uint8)
 
     def __repr__(self):
         #return "grid"
         return str([[self.grid[y][x].status_actual for x in range(self.width)] for y in range(self.height)])
 
 if __name__ == '__main__':
-    grid_test = Grid(width=5, height=5)
+    grid_test = Grid(width=255, height=255)
     ruleset_test = RuleSet()
-    grid_test.grid[2][2].status_actual = 1
-    grid_test.grid[2][1].status_actual = 1
-    grid_test.grid[1][2].status_actual = 1
-    print(grid_test)
-    grid_test.next_turn(ruleset_test)
+    #grid_test.grid[2][2].status_actual = 1
+    #grid_test.grid[2][1].status_actual = 1
+    #grid_test.grid[1][2].status_actual = 1
+    for i in range(100):
+        grid_test.next_turn(ruleset_test)
     print(grid_test)

@@ -20,7 +20,6 @@ class Cell:
 
     def update(self):
         self.status_actual = self.status_next
-        self.status_next = self.status_actual
 
     def __repr__(self):
         return str(self.status_next)#f"Cell(x:{self.x}, y:{self.y}, actual status: {self.status_actual}, next turn status: {
