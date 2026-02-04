@@ -1,17 +1,18 @@
 from cell import Cell
 #from grid import Grid
-from typing import Callable
+from typing import *
 
 class RuleSet(list):
-    def __init__(self, conway=True, brian=False, min_status=0, max_status=1):
+    def __init__(self, sim_style: Literal['conway', 'brian']='conway', min_status=0, max_status=1):
         #if conway is true: creating conway ruleset
         super().__init__()
         self.min_status = min_status
         self.max_status = max_status
-        if conway:
-            self.make_conway_rules()
-        elif brian:
-            self.make_brian_rules()
+        match sim_style:
+            case 'conway':
+                self.make_conway_rules()
+            case 'brian':
+                self.make_brian_rules()
 
         self.dict = {}
         for status in range(min_status, self.max_status+1):
@@ -42,12 +43,12 @@ class RuleSet(list):
 
     def make_brian_rules(self):
         self.max_status = 10
-        def is_dying(status,sum_neighbours):
+        def is_dying(status, sum_neighbours: int):
             #Cells that were in the dying state go into the off state
             if status==1:
                 return True
             return False
-        def is_alive(status, sum_neighbours):
+        def is_alive(status, sum_neighbours: int):
             #All cells that were "on" go into the "dying" state,
             if status == 10:
                 return True

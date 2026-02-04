@@ -46,7 +46,7 @@ class Grid:
                 self.grid[y][x].update()
 
     def get_numpy_array(self):
-        return np.array([[(1-self.grid[y][x].status_actual)*255 for x in range(self.width)] for y in range(self.height)], dtype=np.uint8)
+        return np.array([[(self.ruleset.max_status-self.grid[y][x].status_actual)/self.ruleset.max_status*255 for x in range(self.width)] for y in range(self.height)], dtype=np.uint8)
 
     def __repr__(self):
         #return "grid"
