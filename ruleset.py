@@ -61,7 +61,7 @@ class RuleSet(list):
             return False
 
         def make_alive(cell: Cell):
-            cell.status_next = 2
+            cell.status_next = 10
 
         def make_dying(cell: Cell):
             cell.status_next = 1
