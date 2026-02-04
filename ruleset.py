@@ -1,4 +1,4 @@
-from cell import Cell
+from cell import Cell, min_status, max_status
 #from grid import Grid
 from typing import Callable
 
@@ -8,6 +8,21 @@ class RuleSet(list):
         super().__init__()
         if conway:
             self.make_conway_rules()
+        self.dict = {}
+        for status in range(min_status, max_status+1):
+            for sum_neighbours in range(8*min_status, 8*max_status+1):
+                rule_found = False
+                for rule in self:
+                    if rule.does_apply(status, sum_neighbours):
+                        self.dict[(status, sum_neighbours)] = rule.apply_rule
+                        rule_found = True
+                        break
+                if not rule_found:
+                    self.dict[(status, sum_neighbours)] = self.no_rule_applies
+
+
+    def no_rule_applies(self, cell: Cell):
+        cell.status_next = cell.status_actual
 
     def create_rule(self, condition: Callable, action: Callable):
         rule = Rule(condition, action)
@@ -17,12 +32,13 @@ class RuleSet(list):
         # Caution: no overlap between the rules - maximum 1 rule should apply for each cell
         sum_neighbours = sum([neighbour.status_actual for neighbour in neighbours])
         status = cell.status_actual
-        for rule in self:
-            if rule.does_apply(status, sum_neighbours):
-                rule.apply_rule(cell)
-                return 0
-        cell.status_next = cell.status_actual
-        return 1 #nothing changes
+        self.dict[(status, sum_neighbours)](cell)
+        #for rule in self:
+        #    if rule.does_apply(status, sum_neighbours):
+        #        rule.apply_rule(cell)
+        #        return 0
+        #cell.status_next = cell.status_actual
+        #return 1 #nothing changes
 
     def make_conway_rules(self):
         def underpopulation(status, sum_neighbours: int):
@@ -56,13 +72,13 @@ class RuleSet(list):
         self.create_rule(reproduction, make_alive)
 
 class Rule:
-    def __init__(self, condition: Callable[[Cell, list], bool], action: Callable[[Cell], None]):
+    def __init__(self, condition: Callable[[int, int], bool], action: Callable[[Cell], None]):
         #Args: condition (callable): function that takes (cell, neighbours) and returns bool
         self.condition = condition
         self.action = action
 
-    def does_apply(self, cell:Cell, neighbours: list):
-        return self.condition(cell, neighbours)
+    def does_apply(self, status, sum_neighbours: int):
+        return self.condition(status, sum_neighbours)
 
     def apply_rule(self, cell: Cell):
         self.action(cell)
