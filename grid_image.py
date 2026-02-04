@@ -1,4 +1,5 @@
 import numpy as np
+from PyQt6.QtCore import QSize
 from PyQt6.QtGui import QImage, QPainter
 from PyQt6.QtWidgets import QWidget
 
@@ -8,6 +9,12 @@ class GridImage(QWidget):
         super().__init__()
         self.image_data = None
         self.zoom = 1
+
+    def sizeHint(self):
+        if self.image_data is not None:
+            return QSize(*self.image_data.shape)
+        else:
+            return QSize(255, 255)
 
     def set_image_data(self, data: np.ndarray):
         self.image_data = data
