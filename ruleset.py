@@ -1,16 +1,21 @@
-from cell import Cell, min_status, max_status
+from cell import Cell
 #from grid import Grid
 from typing import Callable
 
 class RuleSet(list):
-    def __init__(self, conway=True):
+    def __init__(self, conway=True, brian=False, min_status=0, max_status=1):
         #if conway is true: creating conway ruleset
         super().__init__()
+        self.min_status = min_status
+        self.max_status = max_status
         if conway:
             self.make_conway_rules()
+        elif brian:
+            self.make_brian_rules()
+
         self.dict = {}
-        for status in range(min_status, max_status+1):
-            for sum_neighbours in range(8*min_status, 8*max_status+1):
+        for status in range(min_status, self.max_status+1):
+            for sum_neighbours in range(8*min_status, 8*self.max_status+1):
                 rule_found = False
                 for rule in self:
                     if rule.does_apply(status, sum_neighbours):
@@ -33,12 +38,39 @@ class RuleSet(list):
         sum_neighbours = sum([neighbour.status_actual for neighbour in neighbours])
         status = cell.status_actual
         self.dict[(status, sum_neighbours)](cell)
-        #for rule in self:
-        #    if rule.does_apply(status, sum_neighbours):
-        #        rule.apply_rule(cell)
-        #        return 0
-        #cell.status_next = cell.status_actual
-        #return 1 #nothing changes
+
+
+    def make_brian_rules(self):
+        self.max_status = 2
+        def is_dying(status):
+            #Cells that were in the dying state go into the off state
+            if status==1:
+                return True
+            return False
+        def is_alive(status):
+            #All cells that were "on" go into the "dying" state,
+            if status == 10:
+                return True
+            return False
+
+        def reproduction(status, sum_neighbours: int):
+            #cell turns on if it was off but had exactly two neighbors that were on
+            if sum_neighbours//10 == 2 and status == 0:
+                return True
+            return False
+
+        def make_alive(cell: Cell):
+            cell.status_next = 2
+
+        def make_dying(cell: Cell):
+            cell.status_next = 1
+
+        def make_dead(cell: Cell):
+            cell.status_next = 0
+
+        self.create_rule(is_dying, make_dead)
+        self.create_rule(is_alive, make_dying)
+        self.create_rule(reproduction, make_alive)
 
     def make_conway_rules(self):
         def underpopulation(status, sum_neighbours: int):
@@ -85,12 +117,12 @@ class Rule:
 
 if __name__ == '__main__':
     from grid import Grid
-    grid = Grid(width=5, height=5)
+    ruleset_test = RuleSet(conway=True)
+    grid = Grid(width=5, height=5, ruleset=ruleset_test)
     grid.grid[2][2].status_actual = 1
     grid.grid[2][1].status_actual = 1
     grid.grid[1][2].status_actual = 1
     print(grid)
-    ruleset_test = RuleSet(conway=True)
     for x in range(grid.width):
         for y in range(grid.height):
             neighbours = grid.get_neighbours(grid.grid[y][x])

@@ -1,8 +1,6 @@
 from dataclasses import dataclass
 #from grid import Grid
-
-min_status = 0
-max_status = 1
+#from ruleset import min_status, max_status
 
 @dataclass
 class Cell:
@@ -12,11 +10,11 @@ class Cell:
     status_next: int = 0
     color: int = 255
 
-    def __post_init__(self):
+    """def __post_init__(self):
         if (self.status_actual > max_status) or (self.status_actual < min_status):
             raise ValueError(
             f"status_actual={self.status_actual} outside the interval [{min_status}, {max_status}]"
-        )
+        )"""
 
     def update(self):
         self.status_actual = self.status_next

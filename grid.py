@@ -1,20 +1,23 @@
-from cell import Cell, max_status, min_status
+from cell import Cell
 from ruleset import RuleSet
 import numpy as np
 
 class Grid:
-    def __init__(self, width, height):
+    def __init__(self, width, height, ruleset):
         self.width = width
         self.height = height
+        self.ruleset = ruleset
         self.grid = [[Cell(x=x, y=y) for x in range(width)] for y in range(height)]
         self.neighbours_list = [[self.get_neighbours(self.grid[y][x]) for x in range(width)] for y
                                  in range(height)]
 
+
     def randomise(self):
         for x in range(self.width):
             for y in range(self.height):
-                self.grid[y][x].status_actual = np.random.randint(min_status,  max_status+1)
-                if self.grid[y][x].status_actual == max_status:
+                self.grid[y][x].status_actual = np.random.randint(self.ruleset.min_status,
+                                                                  self.ruleset.max_status+1)
+                if self.grid[y][x].status_actual == self.ruleset.max_status:
                     self.grid[y][x].color = 0
 
     def get_neighbours(self, cell: Cell):
@@ -48,8 +51,8 @@ class Grid:
         return str([[self.grid[y][x].status_actual for x in range(self.width)] for y in range(self.height)])
 
 if __name__ == '__main__':
-    grid_test = Grid(width=255, height=255)
     ruleset_test = RuleSet()
+    grid_test = Grid(width=255, height=255, ruleset=ruleset_test)
     #grid_test.grid[2][2].status_actual = 1
     #grid_test.grid[2][1].status_actual = 1
     #grid_test.grid[1][2].status_actual = 1
