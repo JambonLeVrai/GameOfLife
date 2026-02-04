@@ -52,6 +52,8 @@ class MainWindow(QMainWindow):
         speed_label = QLabel('Target speed (steps/s)')
         self.speed_spin = QSpinBox()
         self.speed_spin.setMinimum(1)
+        self.speed_spin.setMaximum(60)
+        self.speed_spin.setValue(60)
         speed_row_layout = QHBoxLayout()
         speed_row_layout.addWidget(speed_label, 0)
         speed_row_layout.addWidget(self.speed_spin, 1)
@@ -103,7 +105,7 @@ class MainWindow(QMainWindow):
         #self.ff_simulation_thread = FFSimulationThread(self.ff_shared_buffer, self.sim_obj, 1e-3)
         #self.ff_display_thread = FFDisplayThread(self.ff_shared_buffer, self.ff_simulation_thread, self.grid_image)
 
-        self.simple_simulation_thread = SimpleSimulationThread(self.sim_obj, self.grid_image, 16.67)
+        self.simple_simulation_thread = None
 
 
     def update_zoom_level(self):
@@ -126,7 +128,7 @@ class MainWindow(QMainWindow):
 
         #self.ff_simulation_thread.start()
         #self.ff_display_thread.start()
-        self.simple_simulation_thread = SimpleSimulationThread(self.sim_obj, self.grid_image, 16.67)
+        self.simple_simulation_thread = SimpleSimulationThread(self.sim_obj, self.grid_image, 1/float(self.speed_spin.value())*1e3)
         self.simple_simulation_thread.start()
 
     def stop_simulation(self):

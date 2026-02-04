@@ -1,6 +1,6 @@
 import time
 
-from PyQt6.QtCore import QMutex, QWaitCondition, QThread
+from PyQt6.QtCore import QThread
 
 
 class SimpleSimulationThread(QThread):
