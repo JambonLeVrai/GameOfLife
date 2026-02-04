@@ -20,29 +20,30 @@ class Grid:
                 if not(dx == 0 and dy == 0):
                     if 0 <= xi+dx < self.width and 0 <= yi + dy < self.height:
                         Neighbours.append(self.grid[yi+dy][xi+dx])
-
         return Neighbours
 
-    def next_turn(self):
-        for x in range(grid.width):
-            for y in range(grid.height):
-                neighbours = grid.get_neighbours(grid.grid[y][x])
-                result = ruleset.apply_rules(cell=grid.grid[y][x], neighbours=neighbours)
+    def next_turn(self, ruleset):
+        for x in range(self.width):
+            for y in range(self.height):
+                neighbours = self.get_neighbours(self.grid[y][x])
+                result = ruleset.apply_rules(cell=self.grid[y][x], neighbours=neighbours)
 
-        for x in range(grid.width):
-            for y in range(grid.height):
+        for x in range(self.width):
+            for y in range(self.height):
                 self.grid[y][x].update()
+                if self.grid[y][x].status_actual == max_status:
+                    self.grid[y][x].color = (0,0,0)
 
     def __repr__(self):
         #return "grid"
         return str([[self.grid[y][x].status_actual for x in range(self.width)] for y in range(self.height)])
 
 if __name__ == '__main__':
-    grid = Grid(width=5, height=5)
-    ruleset = RuleSet()
-    grid.grid[2][2].status_actual = 1
-    grid.grid[2][1].status_actual = 1
-    grid.grid[1][2].status_actual = 1
-    print(grid)
-    grid.next_turn()
-    print(grid)
+    grid_test = Grid(width=5, height=5)
+    ruleset_test = RuleSet()
+    grid_test.grid[2][2].status_actual = 1
+    grid_test.grid[2][1].status_actual = 1
+    grid_test.grid[1][2].status_actual = 1
+    print(grid_test)
+    grid_test.next_turn(ruleset_test)
+    print(grid_test)

@@ -5,6 +5,7 @@ from typing import Callable
 class RuleSet(list):
     def __init__(self, conway=True):
         #if conway is true: creating conway ruleset
+        super().__init__()
         if conway:
             self.make_conway_rules()
 
@@ -79,10 +80,10 @@ if __name__ == '__main__':
     grid.grid[2][1].status_actual = 1
     grid.grid[1][2].status_actual = 1
     print(grid)
-    ruleset = RuleSet(conway=True)
+    ruleset_test = RuleSet(conway=True)
     for x in range(grid.width):
         for y in range(grid.height):
             neighbours = grid.get_neighbours(grid.grid[y][x])
-            result = ruleset.apply_rules(cell=grid.grid[y][x], neighbours=neighbours)
-    print(([[grid.grid[y][x].status_next for x in range(grid.width)] for y in range(grid.height)])
-)
+            result = ruleset_test.apply_rules(cell=grid.grid[y][x], neighbours=neighbours)
+    grid.next_turn(ruleset_test)
+    print(grid)
