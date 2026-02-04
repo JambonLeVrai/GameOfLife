@@ -7,6 +7,8 @@ class Grid:
         self.width = width
         self.height = height
         self.grid = [[Cell(x=x, y=y) for x in range(width)] for y in range(height)]
+        self.neighbours_list = [[self.get_neighbours(self.grid[y][x]) for x in range(width)] for y
+                                 in range(height)]
 
     def randomise(self):
         self.grid = [[Cell(x=x, y=y, status_actual=np.random.randint(min_status, max_status+1) ) for x in range(self.width)] for y in range(self.height)]
@@ -30,7 +32,8 @@ class Grid:
     def next_turn(self, ruleset):
         for x in range(self.width):
             for y in range(self.height):
-                neighbours = self.get_neighbours(self.grid[y][x])
+                #neighbours = self.get_neighbours(self.grid[y][x])
+                neighbours = self.neighbours_list[y][x]
                 result = ruleset.apply_rules(cell=self.grid[y][x], neighbours=neighbours)
 
         for x in range(self.width):

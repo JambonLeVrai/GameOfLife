@@ -15,37 +15,34 @@ class RuleSet(list):
 
     def apply_rules(self, cell: Cell, neighbours: list):
         # Caution: no overlap between the rules - maximum 1 rule should apply for each cell
+        sum_neighbours = sum([neighbour.status_actual for neighbour in neighbours])
         for rule in self:
-            if rule.does_apply(cell, neighbours):
+            if rule.does_apply(cell, sum_neighbours):
                 rule.apply_rule(cell)
                 return 0
         cell.status_next = cell.status_actual
         return 1 #nothing changes
 
     def make_conway_rules(self):
-        def underpopulation(cell: Cell, neighbours: list):
-            sum_neighbours = sum([neighbour.status_actual for neighbour in neighbours])
+        def underpopulation(cell: Cell, sum_neighbours: int):
             actual_status = cell.status_actual
             if actual_status == 1 and sum_neighbours < 2:
                 return True
             return False
 
-        def overpopulation(cell: Cell, neighbours: list):
-            sum_neighbours = sum([neighbour.status_actual for neighbour in neighbours])
+        def overpopulation(cell: Cell, sum_neighbours: int):
             actual_status = cell.status_actual
             if actual_status == 1 and sum_neighbours > 3:
                 return True
             return False
 
-        def stay_alive(cell: Cell, neighbours: list):
-            sum_neighbours = sum([neighbour.status_actual for neighbour in neighbours])
+        def stay_alive(cell: Cell, sum_neighbours: int):
             actual_status = cell.status_actual
             if actual_status == 1 and sum_neighbours in [2,3]:
                 return True
             return False
 
-        def reproduction(cell: Cell, neighbours: list):
-            sum_neighbours = sum([neighbour.status_actual for neighbour in neighbours])
+        def reproduction(cell: Cell, sum_neighbours: int):
             actual_status = cell.status_actual
             if actual_status == 0 and sum_neighbours == 3:
                 return True
