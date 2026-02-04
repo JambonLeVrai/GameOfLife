@@ -10,8 +10,8 @@ class Simulator:
         self.height = height
         self.buffer = np.zeros((self.width, self.height), dtype=np.uint8)
 
-        self.grid = Grid(width=self.width, height=self.height)
-        self.rule_set = RuleSet()
+        self.rule_set = RuleSet(sim_style='brian')
+        self.grid = Grid(width=self.width, height=self.height, ruleset=self.rule_set)
         #self.grid.grid[2][2].status_actual = 1
         #self.grid.grid[2][1].status_actual = 1
         #self.grid.grid[2][3].status_actual = 1
@@ -21,7 +21,7 @@ class Simulator:
         self.width = width
         self.height = height
         self.buffer = np.zeros((self.width, self.height), dtype=np.uint8)
-        self.grid = Grid(width=self.width, height=self.height)
+        self.grid = Grid(width=self.width, height=self.height, ruleset=self.rule_set)
         self.grid.randomise()
 
     def simulate(self):
