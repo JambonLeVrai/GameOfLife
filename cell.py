@@ -10,7 +10,7 @@ class Cell:
     y: int
     status_actual: int = 0
     status_next: int = 0
-    color: tuple[int, int, int] = (255,255,255)
+    color: int = 255
 
     def __post_init__(self):
         if (self.status_actual > max_status) or (self.status_actual < min_status):

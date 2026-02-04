@@ -8,8 +8,12 @@ class Grid:
         self.height = height
         self.grid = [[Cell(x=x, y=y) for x in range(width)] for y in range(height)]
 
-    def randomize(self):
+    def randomise(self):
         self.grid = [[Cell(x=x, y=y, status_actual=np.random.randint(min_status, max_status+1) ) for x in range(self.width)] for y in range(self.height)]
+        for x in range(self.width):
+            for y in range(self.height):
+                if self.grid[y][x].status_actual == max_status:
+                    self.grid[y][x].color = 0
 
     def get_neighbours(self, cell: Cell):
         #Par défaut: les cellules au bord de la grille sont mortes (= ne pas les mettre dans la liste)
@@ -32,7 +36,7 @@ class Grid:
             for y in range(self.height):
                 self.grid[y][x].update()
                 if self.grid[y][x].status_actual == max_status:
-                    self.grid[y][x].color = (0,0,0)
+                    self.grid[y][x].color = 0
 
     def __repr__(self):
         #return "grid"
