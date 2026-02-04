@@ -54,12 +54,13 @@ class Grid:
 
 if __name__ == '__main__':
     ruleset_test = RuleSet(conway=False, brian=True)
-    grid_test = Grid(width=25, height=25, ruleset=ruleset_test)
+    grid_test = Grid(width=10, height=10, ruleset=ruleset_test)
     grid_test.randomise()
     print(grid_test)
-    print(ruleset_test.dict)
-    for i in range(100):
+    #print(ruleset_test.dict)
+    for i in range(5):
         grid_test.next_turn(ruleset_test)
+        print(grid_test)
 
     #grid_test.grid[2][2].status_actual = 1
     #grid_test.grid[2][1].status_actual = 1
