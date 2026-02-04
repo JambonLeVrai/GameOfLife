@@ -15,8 +15,8 @@ class Grid:
     def randomise(self):
         for x in range(self.width):
             for y in range(self.height):
-                self.grid[y][x].status_actual = np.random.randint(self.ruleset.min_status,
-                                                                  self.ruleset.max_status+1)
+                n_status = int(np.log10(self.ruleset.max_status))
+                self.grid[y][x].status_actual = np.random.choice([10**i for i in range(n_status+1)])
                 if self.grid[y][x].status_actual == self.ruleset.max_status:
                     self.grid[y][x].color = 0
 

@@ -41,13 +41,13 @@ class RuleSet(list):
 
 
     def make_brian_rules(self):
-        self.max_status = 2
-        def is_dying(status):
+        self.max_status = 10
+        def is_dying(status,sum_neighbours):
             #Cells that were in the dying state go into the off state
             if status==1:
                 return True
             return False
-        def is_alive(status):
+        def is_alive(status, sum_neighbours):
             #All cells that were "on" go into the "dying" state,
             if status == 10:
                 return True
