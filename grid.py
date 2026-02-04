@@ -11,9 +11,9 @@ class Grid:
                                  in range(height)]
 
     def randomise(self):
-        self.grid = [[Cell(x=x, y=y, status_actual=np.random.randint(min_status, max_status+1) ) for x in range(self.width)] for y in range(self.height)]
         for x in range(self.width):
             for y in range(self.height):
+                self.grid[y][x].status_actual = np.random.randint(min_status,  max_status+1)
                 if self.grid[y][x].status_actual == max_status:
                     self.grid[y][x].color = 0
 
