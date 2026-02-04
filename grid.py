@@ -18,12 +18,13 @@ class Grid:
     def get_neighbours(self, cell: Cell):
         #Par défaut: les cellules au bord de la grille sont mortes (= ne pas les mettre dans la liste)
         xi, yi = cell.x, cell.y
-        Neighbours = []
-        for dx in [-1,0,1]:
-            for dy in [-1,0,1]:
-                if not(dx == 0 and dy == 0):
-                    if 0 <= xi+dx < self.width and 0 <= yi + dy < self.height:
-                        Neighbours.append(self.grid[yi+dy][xi+dx])
+        Neighbours = [
+            self.grid[yi + dy][xi + dx]
+            for dx in [-1, 0, 1]
+            for dy in [-1, 0, 1]
+            if not (dx == 0 and dy == 0)
+            if 0 <= xi + dx < self.width and 0 <= yi + dy < self.height
+        ]
         return Neighbours
 
     def next_turn(self, ruleset):
