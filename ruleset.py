@@ -17,34 +17,30 @@ class RuleSet(list):
         # Caution: no overlap between the rules - maximum 1 rule should apply for each cell
         sum_neighbours = sum([neighbour.status_actual for neighbour in neighbours])
         for rule in self:
-            if rule.does_apply(cell, sum_neighbours):
+            if rule.does_apply(cell.status_actual, sum_neighbours):
                 rule.apply_rule(cell)
                 return 0
         cell.status_next = cell.status_actual
         return 1 #nothing changes
 
     def make_conway_rules(self):
-        def underpopulation(cell: Cell, sum_neighbours: int):
-            actual_status = cell.status_actual
-            if actual_status == 1 and sum_neighbours < 2:
+        def underpopulation(status, sum_neighbours: int):
+            if status == 1 and sum_neighbours < 2:
                 return True
             return False
 
-        def overpopulation(cell: Cell, sum_neighbours: int):
-            actual_status = cell.status_actual
-            if actual_status == 1 and sum_neighbours > 3:
+        def overpopulation(status, sum_neighbours: int):
+            if status == 1 and sum_neighbours > 3:
                 return True
             return False
 
-        def stay_alive(cell: Cell, sum_neighbours: int):
-            actual_status = cell.status_actual
-            if actual_status == 1 and sum_neighbours in [2,3]:
+        def stay_alive(status, sum_neighbours: int):
+            if status == 1 and sum_neighbours in [2,3]:
                 return True
             return False
 
-        def reproduction(cell: Cell, sum_neighbours: int):
-            actual_status = cell.status_actual
-            if actual_status == 0 and sum_neighbours == 3:
+        def reproduction(status, sum_neighbours: int):
+            if status == 0 and sum_neighbours == 3:
                 return True
             return False
 
