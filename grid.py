@@ -16,7 +16,9 @@ class Grid:
         for x in range(self.width):
             for y in range(self.height):
                 n_status = int(np.log10(self.ruleset.max_status))
-                self.grid[y][x].status_actual = np.random.choice([10**i for i in range(n_status+1)])
+                #print("n_status:", n_status, "max_status: ", self.ruleset.max_status)
+                self.grid[y][x].status_actual = np.random.choice([0]+[10**i for i in range(
+                    n_status+1)])
                 if self.grid[y][x].status_actual == self.ruleset.max_status:
                     self.grid[y][x].color = 0
 
@@ -51,11 +53,17 @@ class Grid:
         return str([[self.grid[y][x].status_actual for x in range(self.width)] for y in range(self.height)])
 
 if __name__ == '__main__':
-    ruleset_test = RuleSet()
-    grid_test = Grid(width=255, height=255, ruleset=ruleset_test)
+    ruleset_test = RuleSet(conway=False, brian=True)
+    grid_test = Grid(width=25, height=25, ruleset=ruleset_test)
+    grid_test.randomise()
+    print(grid_test)
+    print(ruleset_test.dict)
+    for i in range(100):
+        grid_test.next_turn(ruleset_test)
+
     #grid_test.grid[2][2].status_actual = 1
     #grid_test.grid[2][1].status_actual = 1
     #grid_test.grid[1][2].status_actual = 1
-    for i in range(100):
-        grid_test.next_turn(ruleset_test)
-    print(grid_test)
+    #for i in range(2):
+    #    grid_test.next_turn(ruleset_test)
+    #print(grid_test)
