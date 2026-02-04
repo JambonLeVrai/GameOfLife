@@ -16,8 +16,9 @@ class RuleSet(list):
     def apply_rules(self, cell: Cell, neighbours: list):
         # Caution: no overlap between the rules - maximum 1 rule should apply for each cell
         sum_neighbours = sum([neighbour.status_actual for neighbour in neighbours])
+        status = cell.status_actual
         for rule in self:
-            if rule.does_apply(cell.status_actual, sum_neighbours):
+            if rule.does_apply(status, sum_neighbours):
                 rule.apply_rule(cell)
                 return 0
         cell.status_next = cell.status_actual
