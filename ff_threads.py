@@ -15,7 +15,6 @@ class FFSharedBuffer:
 
 
 class FFSimulationThread(QThread):
-
     def __init__(self, shared_buffer: FFSharedBuffer, sim_obj, step_time):
         super().__init__()
         self.shared_buffer = shared_buffer
@@ -68,7 +67,6 @@ class FFDisplayThread(QThread):
 
         self.grid_image.set_image_data(self.shared_buffer.buffer)
         self.shared_buffer.frame_ready = False
-
 
     def stop(self):
         self.running = False

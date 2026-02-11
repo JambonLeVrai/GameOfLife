@@ -1,4 +1,5 @@
 from cell import Cell
+from constants import colorsets
 from ruleset import RuleSet
 import numpy as np
 
@@ -11,11 +12,7 @@ class Grid:
         self.neighbours_list = [[self.get_neighbours(self.grid[y][x]) for x in range(width)] for y
                                  in range(height)]
 
-        self.status_colors = {
-            0: 0xffffffff,
-            1: 0x00000000,
-            10: 0x00000000
-        }
+        self.status_colors = colorsets['conway']
 
     def set_status_colors(self, status_colors: dict):
         self.status_colors = status_colors
@@ -24,7 +21,6 @@ class Grid:
         for x in range(self.width):
             for y in range(self.height):
                 self.grid[y][x].status_actual = 0
-                self.grid[y][x].color = 0
 
     def randomise(self):
         for x in range(self.width):
@@ -33,8 +29,6 @@ class Grid:
                 #print("n_status:", n_status, "max_status: ", self.ruleset.max_status)
                 self.grid[y][x].status_actual = np.random.choice([0]+[10**i for i in range(
                     n_status+1)])
-                if self.grid[y][x].status_actual == self.ruleset.max_status:
-                    self.grid[y][x].color = 0
 
     def get_neighbours(self, cell: Cell):
         #Par défaut: les cellules au bord de la grille sont mortes (= ne pas les mettre dans la liste)
@@ -67,7 +61,7 @@ class Grid:
         return str([[self.grid[y][x].status_actual for x in range(self.width)] for y in range(self.height)])
 
 if __name__ == '__main__':
-    ruleset_test = RuleSet(conway=False, brian=True)
+    ruleset_test = RuleSet('brian')
     grid_test = Grid(width=10, height=10, ruleset=ruleset_test)
     grid_test.randomise()
     print(grid_test)

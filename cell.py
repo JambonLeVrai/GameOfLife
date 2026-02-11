@@ -1,6 +1,5 @@
 from dataclasses import dataclass
-#from grid import Grid
-#from ruleset import min_status, max_status
+
 
 @dataclass
 class Cell:

@@ -2,6 +2,7 @@ from cell import Cell
 #from grid import Grid
 from typing import *
 
+
 class RuleSet(list):
     def __init__(self, sim_style: Literal['conway', 'brian']='conway', min_status=0, max_status=1):
         #if conway is true: creating conway ruleset
@@ -121,7 +122,7 @@ class Rule:
 if __name__ == '__main__':
     from grid import Grid
 
-    ruleset_test = RuleSet(conway=True)
+    ruleset_test = RuleSet('conway')
     grid = Grid(width=5, height=5, ruleset=ruleset_test)
     grid.grid[2][2].status_actual = 1
     grid.grid[2][1].status_actual = 1

@@ -7,7 +7,6 @@ from constants import presets
 from grid_image import GridImage, GridImageContainer
 from simple_thread import SimpleSimulationThread
 from simulator import Simulator
-from ff_threads import FFSharedBuffer, FFDisplayThread, FFSimulationThread
 
 
 class MainWindow(QMainWindow):

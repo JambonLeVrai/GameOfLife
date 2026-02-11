@@ -14,9 +14,6 @@ class Simulator:
 
         self.rule_set = RuleSet(sim_style=sim_style)
         self.grid = Grid(width=self.width, height=self.height, ruleset=self.rule_set)
-        #self.grid.grid[2][2].status_actual = 1
-        #self.grid.grid[2][1].status_actual = 1
-        #self.grid.grid[2][3].status_actual = 1
         self.grid.randomise()
 
     def update_ruleset(self, sim_style: Literal['conway', 'brian']):

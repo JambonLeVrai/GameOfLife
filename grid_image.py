@@ -4,6 +4,7 @@ from PyQt6.QtGui import QImage, QPainter
 from PyQt6.QtWidgets import QWidget, QHBoxLayout, QFrame, QPushButton
 from typing import *
 
+
 class GridImageContainer(QWidget):
     def __init__(self, grid_image):
         super().__init__()
