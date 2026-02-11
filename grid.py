@@ -11,6 +11,12 @@ class Grid:
         self.neighbours_list = [[self.get_neighbours(self.grid[y][x]) for x in range(width)] for y
                                  in range(height)]
 
+        self.status_colors = {
+            0: 0xffffffff,
+            1: 0xff00ff00,
+            10: 0xff000000
+        }
+
 
     def randomise(self):
         for x in range(self.width):
@@ -46,7 +52,7 @@ class Grid:
                 self.grid[y][x].update()
 
     def get_numpy_array(self):
-        return np.array([[(self.ruleset.max_status-self.grid[y][x].status_actual)/self.ruleset.max_status*255 for x in range(self.width)] for y in range(self.height)], dtype=np.uint8)
+        return np.array([[self.status_colors[self.grid[y][x].status_actual] for x in range(self.width)] for y in range(self.height)], dtype=np.uint32)
 
     def __repr__(self):
         #return "grid"

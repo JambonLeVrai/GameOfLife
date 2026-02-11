@@ -93,12 +93,12 @@ class MainWindow(QMainWindow):
         rulesets_label = QLabel('Ruleset')
         rulesets_layout.addWidget(rulesets_label, 0)
         self.rulesets_w = QComboBox()
-        self.rulesets_w.addItems(['Conway'])
+        self.rulesets_w.addItems(['Conway', "Brian's brain"])
         self.rulesets_w.currentIndexChanged.connect(self.rulesets_changed)
         rulesets_layout.addWidget(self.rulesets_w, 1)
         layout.addLayout(rulesets_layout)
 
-        self.disabled_list_on_play = [self.apply_grid_dimensions_w, self.clear_grid_w, self.random_grid_w]
+        self.disabled_list_on_play = [self.apply_grid_dimensions_w, self.clear_grid_w, self.random_grid_w, self.rulesets_w]
 
         self.sim_obj = Simulator(255, 255)
         #self.ff_shared_buffer = FFSharedBuffer()
@@ -155,8 +155,12 @@ class MainWindow(QMainWindow):
         self.grid_image.set_image_data(self.sim_obj.grid.get_numpy_array())
 
     def rulesets_changed(self):
-        pass  # PLACEHOLDER
-
+        match self.rulesets_w.currentText():
+            case 'Conway':
+                self.sim_obj.update_ruleset('conway')
+            case "Brian's brain":
+                self.sim_obj.update_ruleset('brian')
+        self.random_grid()
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

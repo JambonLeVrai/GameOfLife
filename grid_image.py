@@ -2,6 +2,7 @@ import numpy as np
 from PyQt6.QtCore import QSize
 from PyQt6.QtGui import QImage, QPainter
 from PyQt6.QtWidgets import QWidget
+from typing import *
 
 
 class GridImage(QWidget):
@@ -9,6 +10,10 @@ class GridImage(QWidget):
         super().__init__()
         self.image_data = None
         self.zoom = 1
+        self.colors: Literal['monochrome', 'rgb'] = 'monochrome'
+
+    def change_colors(self, new_colors: Literal['monochrome', 'rgb']):
+        self.colors = new_colors
 
     def sizeHint(self):
         if self.image_data is not None:
@@ -25,13 +30,13 @@ class GridImage(QWidget):
             return
 
         height, width = self.image_data.shape
-        bytes_per_line = width
+        bytes_per_line = width*4
         qimage = QImage(
             self.image_data.data,
             width,
             height,
             bytes_per_line,
-            QImage.Format.Format_Grayscale8
+            QImage.Format.Format_RGB32
         )
 
         self.set_zoom(self.zoom)

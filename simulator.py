@@ -1,21 +1,26 @@
 import numpy as np
+from typing import *
 
 from grid import Grid
 from ruleset import RuleSet
 
 
 class Simulator:
-    def __init__(self, width: int, height: int):
+    def __init__(self, width: int, height: int, sim_style: Literal['conway', 'brian'] = 'conway'):
         self.width = width
         self.height = height
         self.buffer = np.zeros((self.width, self.height), dtype=np.uint8)
 
-        self.rule_set = RuleSet(sim_style='brian')
+        self.rule_set = RuleSet(sim_style=sim_style)
         self.grid = Grid(width=self.width, height=self.height, ruleset=self.rule_set)
         #self.grid.grid[2][2].status_actual = 1
         #self.grid.grid[2][1].status_actual = 1
         #self.grid.grid[2][3].status_actual = 1
         self.grid.randomise()
+
+    def update_ruleset(self, sim_style: Literal['conway', 'brian']):
+        self.rule_set = RuleSet(sim_style=sim_style)
+        self.grid.ruleset = self.rule_set
 
     def resize(self, width: int, height: int):
         self.width = width
