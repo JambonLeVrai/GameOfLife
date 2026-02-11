@@ -1,8 +1,17 @@
 import numpy as np
 from PyQt6.QtCore import QSize
 from PyQt6.QtGui import QImage, QPainter
-from PyQt6.QtWidgets import QWidget
+from PyQt6.QtWidgets import QWidget, QHBoxLayout, QFrame, QPushButton
 from typing import *
+
+class GridImageContainer(QWidget):
+    def __init__(self, grid_image):
+        super().__init__()
+        layout = QHBoxLayout()
+        layout.addWidget(QFrame(), stretch=1)
+        layout.addWidget(grid_image)
+        layout.addWidget(QFrame(), stretch=1)
+        self.setLayout(layout)
 
 
 class GridImage(QWidget):

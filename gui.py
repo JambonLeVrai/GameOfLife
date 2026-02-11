@@ -4,7 +4,7 @@ import numpy as np
 import sys
 
 from constants import presets
-from grid_image import GridImage
+from grid_image import GridImage, GridImageContainer
 from simple_thread import SimpleSimulationThread
 from simulator import Simulator
 from ff_threads import FFSharedBuffer, FFDisplayThread, FFSimulationThread
@@ -34,7 +34,8 @@ class MainWindow(QMainWindow):
         self.zoom_level.currentIndexChanged.connect(self.update_zoom_level)
 
         self.grid_image = GridImage()
-        layout.addWidget(self.grid_image)
+        self.grid_image_container = GridImageContainer(grid_image=self.grid_image)
+        layout.addWidget(self.grid_image_container)
 
         # Play
         play_row_layout = QHBoxLayout()
@@ -67,11 +68,11 @@ class MainWindow(QMainWindow):
         self.width_spin = QSpinBox()
         self.width_spin.setMinimum(1)
         self.width_spin.setMaximum(2000)
-        self.width_spin.setValue(255)
+        self.width_spin.setValue(100)
         self.height_spin = QSpinBox()
         self.height_spin.setMinimum(1)
         self.height_spin.setMaximum(2000)
-        self.height_spin.setValue(255)
+        self.height_spin.setValue(100)
         self.apply_grid_dimensions_w = QPushButton('Apply')
         self.apply_grid_dimensions_w.clicked.connect(self.apply_grid_dimensions)
         grid_dimension_layout = QHBoxLayout()
@@ -107,9 +108,15 @@ class MainWindow(QMainWindow):
         rulesets_layout.addWidget(self.rulesets_w, 1)
         layout.addLayout(rulesets_layout)
 
-        self.disabled_list_on_play = [self.apply_grid_dimensions_w, self.clear_grid_w, self.random_grid_w, self.rulesets_w, self.default_grid_setups_apply_w]
+        self.disabled_list_on_play = [
+            self.apply_grid_dimensions_w,
+            self.clear_grid_w,
+            self.random_grid_w,
+            self.rulesets_w,
+            self.default_grid_setups_apply_w
+        ]
 
-        self.sim_obj = Simulator(255, 255)
+        self.sim_obj = Simulator(100, 100)
         #self.ff_shared_buffer = FFSharedBuffer()
         #self.ff_simulation_thread = FFSimulationThread(self.ff_shared_buffer, self.sim_obj, 1e-3)
         #self.ff_display_thread = FFDisplayThread(self.ff_shared_buffer, self.ff_simulation_thread, self.grid_image)
