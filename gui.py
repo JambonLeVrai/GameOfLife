@@ -1,3 +1,4 @@
+from PyQt6.QtCore import pyqtSlot
 from PyQt6.QtWidgets import QApplication, QWidget, QMainWindow, QVBoxLayout, QPushButton, QHBoxLayout, QSpinBox, QLabel, QComboBox
 import numpy as np
 import sys
@@ -44,6 +45,7 @@ class MainWindow(QMainWindow):
         self.step = QSpinBox()
         self.step.setReadOnly(True)
         self.step.setValue(0)
+        self.step.setMaximum(2147483647)
         play_row_layout.addWidget(self.step, 0)
 
         layout.addLayout(play_row_layout)
@@ -106,6 +108,7 @@ class MainWindow(QMainWindow):
         #self.ff_display_thread = FFDisplayThread(self.ff_shared_buffer, self.ff_simulation_thread, self.grid_image)
 
         self.clear_grid()
+        self.sim_obj.update_ruleset('conway')
         self.simple_simulation_thread = None
 
 
@@ -130,6 +133,7 @@ class MainWindow(QMainWindow):
         #self.ff_simulation_thread.start()
         #self.ff_display_thread.start()
         self.simple_simulation_thread = SimpleSimulationThread(self.sim_obj, self.grid_image, 1/float(self.speed_spin.value())*1e3)
+        self.simple_simulation_thread.new_frame_incoming.connect(self.increase_frame)
         self.simple_simulation_thread.start()
 
     def stop_simulation(self):
@@ -143,16 +147,24 @@ class MainWindow(QMainWindow):
     def apply_grid_dimensions(self):
         # my_data = np.astype(np.trunc(np.random.rand(self.height_spin.value(), self.width_spin.value()) * 255), np.uint8)
         # self.grid_image.set_image_data(my_data)
-        self.sim_obj.resize(self.height_spin.value(), self.width_spin.value())
+        simstyle = 'conway'
+        match self.rulesets_w.currentText():
+            case 'Conway':
+                simstyle = 'conway'
+            case "Brian's brain":
+                simstyle = 'brian'
+        self.sim_obj.resize(self.height_spin.value(), self.width_spin.value(), simstyle)
         self.grid_image.set_image_data(self.sim_obj.grid.get_numpy_array())
 
     def clear_grid(self):
         self.sim_obj.grid.clear()
         self.grid_image.set_image_data(self.sim_obj.grid.get_numpy_array())
+        self.reset_frame()
 
     def random_grid(self):
         self.sim_obj.grid.randomise()
         self.grid_image.set_image_data(self.sim_obj.grid.get_numpy_array())
+        self.reset_frame()
 
     def rulesets_changed(self):
         match self.rulesets_w.currentText():
@@ -161,6 +173,14 @@ class MainWindow(QMainWindow):
             case "Brian's brain":
                 self.sim_obj.update_ruleset('brian')
         self.random_grid()
+
+    @pyqtSlot()
+    def increase_frame(self):
+        self.step.setValue(self.step.value()+1)
+
+    def reset_frame(self):
+        self.step.setValue(0)
+
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

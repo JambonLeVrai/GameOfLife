@@ -1,6 +1,7 @@
 import numpy as np
 from typing import *
 
+from constants import colorsets
 from grid import Grid
 from ruleset import RuleSet
 
@@ -21,12 +22,14 @@ class Simulator:
     def update_ruleset(self, sim_style: Literal['conway', 'brian']):
         self.rule_set = RuleSet(sim_style=sim_style)
         self.grid.ruleset = self.rule_set
+        self.grid.set_status_colors(colorsets[sim_style])
 
-    def resize(self, width: int, height: int):
+    def resize(self, width: int, height: int, sim_style: Literal['conway', 'brian']):
         self.width = width
         self.height = height
-        self.buffer = np.zeros((self.width, self.height), dtype=np.uint8)
+        self.buffer = np.zeros((self.width, self.height), dtype=np.uint32)
         self.grid = Grid(width=self.width, height=self.height, ruleset=self.rule_set)
+        self.grid.set_status_colors(colorsets[sim_style])
         self.grid.randomise()
 
     def simulate(self):

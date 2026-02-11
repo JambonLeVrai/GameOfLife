@@ -13,9 +13,12 @@ class Grid:
 
         self.status_colors = {
             0: 0xffffffff,
-            1: 0xff00ff00,
-            10: 0xff000000
+            1: 0x00000000,
+            10: 0x00000000
         }
+
+    def set_status_colors(self, status_colors: dict):
+        self.status_colors = status_colors
 
     def clear(self):
         for x in range(self.width):
