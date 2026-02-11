@@ -43,13 +43,14 @@ class RuleSet(list):
 
     def make_brian_rules(self):
         self.max_status = 10
+
         def is_dying(status, sum_neighbours: int):
-            #Cells that were in the dying state go into the off state
+            # Cells that were in the dying state go into the off state
             if status==1:
                 return True
             return False
         def is_alive(status, sum_neighbours: int):
-            #All cells that were "on" go into the "dying" state,
+            # All cells that were "on" go into the "dying" state,
             if status == 10:
                 return True
             return False
@@ -116,17 +117,21 @@ class Rule:
     def apply_rule(self, cell: Cell):
         self.action(cell)
 
+
 if __name__ == '__main__':
     from grid import Grid
+
     ruleset_test = RuleSet(conway=True)
     grid = Grid(width=5, height=5, ruleset=ruleset_test)
     grid.grid[2][2].status_actual = 1
     grid.grid[2][1].status_actual = 1
     grid.grid[1][2].status_actual = 1
     print(grid)
+
     for x in range(grid.width):
         for y in range(grid.height):
             neighbours = grid.get_neighbours(grid.grid[y][x])
             result = ruleset_test.apply_rules(cell=grid.grid[y][x], neighbours=neighbours)
+
     grid.next_turn(ruleset_test)
     print(grid)

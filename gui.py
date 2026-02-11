@@ -106,6 +106,7 @@ class MainWindow(QMainWindow):
         #self.ff_display_thread = FFDisplayThread(self.ff_shared_buffer, self.ff_simulation_thread, self.grid_image)
 
         self.clear_grid()
+        self.sim_obj.update_ruleset('conway')
         self.simple_simulation_thread = None
 
 
@@ -161,6 +162,7 @@ class MainWindow(QMainWindow):
             case "Brian's brain":
                 self.sim_obj.update_ruleset('brian')
         self.random_grid()
+
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
