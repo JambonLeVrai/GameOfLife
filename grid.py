@@ -17,6 +17,11 @@ class Grid:
             10: 0xff000000
         }
 
+    def clear(self):
+        for x in range(self.width):
+            for y in range(self.height):
+                self.grid[y][x].status_actual = 0
+                self.grid[y][x].color = 0
 
     def randomise(self):
         for x in range(self.width):

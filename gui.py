@@ -105,6 +105,7 @@ class MainWindow(QMainWindow):
         #self.ff_simulation_thread = FFSimulationThread(self.ff_shared_buffer, self.sim_obj, 1e-3)
         #self.ff_display_thread = FFDisplayThread(self.ff_shared_buffer, self.ff_simulation_thread, self.grid_image)
 
+        self.clear_grid()
         self.simple_simulation_thread = None
 
 
@@ -146,9 +147,8 @@ class MainWindow(QMainWindow):
         self.grid_image.set_image_data(self.sim_obj.grid.get_numpy_array())
 
     def clear_grid(self):
-        # PLACEHOLDER
-        my_data = np.zeros((self.height_spin.value(), self.width_spin.value()), dtype=np.uint8)
-        self.grid_image.set_image_data(my_data)
+        self.sim_obj.grid.clear()
+        self.grid_image.set_image_data(self.sim_obj.grid.get_numpy_array())
 
     def random_grid(self):
         self.sim_obj.grid.randomise()

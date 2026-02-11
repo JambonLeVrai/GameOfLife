@@ -10,7 +10,7 @@ app = QApplication(sys.argv)
 window = MainWindow()
 window.show()
 
-my_data = np.astype(np.trunc(np.random.rand(255, 255) * 255), np.uint8)
-window.grid_image.set_image_data(my_data)
+#my_data = np.astype(np.trunc(np.random.rand(255, 255) * 255), np.uint32)
+#window.grid_image.set_image_data(my_data)
 
 app.exec()

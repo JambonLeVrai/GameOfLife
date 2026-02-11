@@ -10,10 +10,6 @@ class GridImage(QWidget):
         super().__init__()
         self.image_data = None
         self.zoom = 1
-        self.colors: Literal['monochrome', 'rgb'] = 'monochrome'
-
-    def change_colors(self, new_colors: Literal['monochrome', 'rgb']):
-        self.colors = new_colors
 
     def sizeHint(self):
         if self.image_data is not None:
