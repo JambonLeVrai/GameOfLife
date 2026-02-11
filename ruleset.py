@@ -15,7 +15,7 @@ class RuleSet(list):
                 self.make_brian_rules()
 
         self.dict = {}
-        for status in range(min_status, self.max_status+1):
+        for status in range(min_status, self.max_status+1): #a optimiser
             for sum_neighbours in range(8*min_status, 8*self.max_status+1):
                 rule_found = False
                 for rule in self:
