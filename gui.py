@@ -3,6 +3,7 @@ from PyQt6.QtWidgets import QApplication, QWidget, QMainWindow, QVBoxLayout, QPu
 import numpy as np
 import sys
 
+from constants import presets
 from grid_image import GridImage
 from simple_thread import SimpleSimulationThread
 from simulator import Simulator
@@ -86,8 +87,14 @@ class MainWindow(QMainWindow):
         self.clear_grid_w.clicked.connect(self.clear_grid)
         self.random_grid_w = QPushButton('Random grid')
         self.random_grid_w.clicked.connect(self.random_grid)
+        self.default_grid_setups = QComboBox()
+        self.default_grid_setups.addItems(list(presets.keys()))
+        self.default_grid_setups_apply_w = QPushButton('Apply')
+        self.default_grid_setups_apply_w.clicked.connect(self.apply_selected_setup)
         reset_grid_layout.addWidget(self.clear_grid_w)
         reset_grid_layout.addWidget(self.random_grid_w)
+        reset_grid_layout.addWidget(self.default_grid_setups)
+        reset_grid_layout.addWidget(self.default_grid_setups_apply_w)
         layout.addLayout(reset_grid_layout)
 
         # Rulesets
@@ -100,7 +107,7 @@ class MainWindow(QMainWindow):
         rulesets_layout.addWidget(self.rulesets_w, 1)
         layout.addLayout(rulesets_layout)
 
-        self.disabled_list_on_play = [self.apply_grid_dimensions_w, self.clear_grid_w, self.random_grid_w, self.rulesets_w]
+        self.disabled_list_on_play = [self.apply_grid_dimensions_w, self.clear_grid_w, self.random_grid_w, self.rulesets_w, self.default_grid_setups_apply_w]
 
         self.sim_obj = Simulator(255, 255)
         #self.ff_shared_buffer = FFSharedBuffer()
@@ -180,6 +187,22 @@ class MainWindow(QMainWindow):
 
     def reset_frame(self):
         self.step.setValue(0)
+
+    def apply_selected_setup(self):
+        self.reset_frame()
+        self.sim_obj.grid.clear()
+        cx = self.sim_obj.grid.width // 2
+        cy = self.sim_obj.grid.width // 2
+        pattern = presets[self.default_grid_setups.currentText()]
+        w = len(pattern[0])
+        h = len(pattern)
+        x0 = cx - w//2
+        y0 = cy - h//2
+        for x in range(x0, x0+w):
+            for y in range(y0, y0+h):
+                self.sim_obj.grid.grid[y][x].status_actual = pattern[y-y0][x-x0]
+
+        self.grid_image.set_image_data(self.sim_obj.grid.get_numpy_array())
 
 
 if __name__ == '__main__':
