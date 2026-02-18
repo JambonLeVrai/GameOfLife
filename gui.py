@@ -25,7 +25,6 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(container)
 
         # Top row
-        self.top_row = QWidget()
         top_row_layout = QHBoxLayout()
         zoom_level_label = QLabel('Zoom level')
         top_row_layout.addWidget(zoom_level_label, 0)
