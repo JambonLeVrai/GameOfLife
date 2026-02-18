@@ -4,6 +4,11 @@ from PyQt6.QtCore import QThread, pyqtSignal
 
 
 class SimpleSimulationThread(QThread):
+    """
+    Simple QThread to decouple the simulation from the control GUI,
+    allowing to keep tweaking parameters and pause the simulation while it is
+    running.
+    """
     new_frame_incoming = pyqtSignal()
 
     def __init__(self, sim_obj, grid_image, step_time_ms):
@@ -22,6 +27,7 @@ class SimpleSimulationThread(QThread):
             self.grid_image.set_image_data(self.sim_obj.get_data_copy())
             self.new_frame_incoming.emit()
 
+            # Waiting
             cur_time = time.time_ns()
             if cur_time - self.current_time < self.step_time_ns:
                 time.sleep((self.step_time_ns - (cur_time - self.current_time))/1e9)

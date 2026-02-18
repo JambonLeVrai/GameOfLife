@@ -1,5 +1,6 @@
 
 
+# Describes the colors in ARGB format to assign to each cell status depending on the simulation type
 colorsets = {
     'brian': {
         0: 0xffffffff,

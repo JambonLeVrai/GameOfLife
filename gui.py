@@ -1,5 +1,5 @@
 from PyQt6.QtCore import pyqtSlot
-from PyQt6.QtWidgets import QApplication, QWidget, QMainWindow, QVBoxLayout, QPushButton, QHBoxLayout, QSpinBox, QLabel, QComboBox
+from PyQt6.QtWidgets import QApplication, QAbstractSpinBox, QWidget, QMainWindow, QVBoxLayout, QPushButton, QHBoxLayout, QSpinBox, QLabel, QComboBox
 import numpy as np
 import sys
 
@@ -10,6 +10,11 @@ from simulator import Simulator
 
 
 class MainWindow(QMainWindow):
+    """
+    Main window class containing all widgets, instantiating the simulation threads
+    and controls for the simulation
+    """
+
     def __init__(self):
         super().__init__()
 
@@ -47,6 +52,7 @@ class MainWindow(QMainWindow):
         self.step.setReadOnly(True)
         self.step.setValue(0)
         self.step.setMaximum(2147483647)
+        self.step.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.NoButtons)
         play_row_layout.addWidget(self.step, 0)
 
         layout.addLayout(play_row_layout)
@@ -158,8 +164,6 @@ class MainWindow(QMainWindow):
         self.simple_simulation_thread.stop()
 
     def apply_grid_dimensions(self):
-        # my_data = np.astype(np.trunc(np.random.rand(self.height_spin.value(), self.width_spin.value()) * 255), np.uint8)
-        # self.grid_image.set_image_data(my_data)
         simstyle = 'conway'
         match self.rulesets_w.currentText():
             case 'Conway':
