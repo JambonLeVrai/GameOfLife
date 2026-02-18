@@ -47,7 +47,7 @@ class Grid:
             for y in range(self.height):
                 #neighbours = self.get_neighbours(self.grid[y][x])
                 neighbours = self.neighbours_list[y][x]
-                result = ruleset.apply_rules(cell=self.grid[y][x], neighbours=neighbours)
+                ruleset.apply_rules(cell=self.grid[y][x], neighbours=neighbours)
 
         for x in range(self.width):
             for y in range(self.height):
@@ -65,14 +65,6 @@ if __name__ == '__main__':
     grid_test = Grid(width=10, height=10, ruleset=ruleset_test)
     grid_test.randomise()
     print(grid_test)
-    #print(ruleset_test.dict)
     for i in range(5):
         grid_test.next_turn(ruleset_test)
         print(grid_test)
-
-    #grid_test.grid[2][2].status_actual = 1
-    #grid_test.grid[2][1].status_actual = 1
-    #grid_test.grid[1][2].status_actual = 1
-    #for i in range(2):
-    #    grid_test.next_turn(ruleset_test)
-    #print(grid_test)
